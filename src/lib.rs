@@ -27,8 +27,8 @@ mod tests {
             global: 43.55,
             length: 99.0,
         };
-        assert_eq!(Some(34.0), p.mov(0.55, &s));
-        assert_eq!(None, p.mov(-35.0, &s));
-        assert_eq!(None, p.mov(1000., &s));
+        assert_eq!(Ok(34.0), p.mov(0.55, &s));
+        assert_eq!(Err(-1.0), p.mov(-35.0, &s));
+        assert_eq!(Err(1.0), p.mov(66.0, &s));
     }
 }

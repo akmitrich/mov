@@ -11,13 +11,15 @@ impl Point {
         section.global + self.local
     }
 
-    pub fn mov(&mut self, displacement: Num, section: &Section) -> Option<Num> {
+    pub fn mov(&mut self, displacement: Num, section: &Section) -> Result<Num, Num> {
         let pos = self.local + displacement;
-        if (0.0..=section.length).contains(&pos) {
-            self.local = pos;
-            Some(pos)
+        if pos < 0.0 {
+            Err(pos)
+        } else if pos > section.length {
+            Err(pos - section.length)
         } else {
-            None
+            self.local = pos;
+            Ok(pos)
         }
     }
 }
