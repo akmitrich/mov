@@ -7,10 +7,6 @@ pub struct Point {
 }
 
 impl Point {
-    pub fn global_position(&self, section: &Section) -> Num {
-        section.global + self.local
-    }
-
     pub fn mov(&mut self, displacement: Num, section: &Section) -> Result<Num, Num> {
         let pos = self.local + displacement;
         if pos < 0.0 {
