@@ -26,7 +26,6 @@ impl Pos {
         if let Self::On(t) = self {
             f(t);
         }
-
         self
     }
 }

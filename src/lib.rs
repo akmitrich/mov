@@ -1,9 +1,27 @@
+use base::Point;
+
+use crate::base::Section;
+
 pub mod base;
 
 pub type Num = f32;
 
 pub fn run() {
-    println!("Hello, MOV!");
+    let p = std::collections::HashMap::<String, Point>::from_iter(vec![(
+        "abc".to_owned(),
+        Point { local: 11.0 },
+    )]);
+    println!("Points: {}", serde_json::to_string_pretty(&p).unwrap());
+
+    let s = std::collections::HashMap::<String, Section>::from_iter(vec![(
+        "777".to_owned(),
+        Section {
+            global: 508345.4,
+            length: 2498.2,
+            direction: base::Direction::Even,
+        },
+    )]);
+    println!("Sections: {}", serde_json::to_string_pretty(&s).unwrap());
 }
 
 #[cfg(test)]

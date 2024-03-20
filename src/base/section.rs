@@ -1,6 +1,7 @@
 use super::{Direction, Point, Pos};
 use crate::Num;
 
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct Section {
     pub global: Num,
     pub length: Num,

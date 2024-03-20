@@ -2,7 +2,7 @@ use std::ops::Mul;
 
 use crate::Num;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]
 pub enum Direction {
     No,
     Odd,
