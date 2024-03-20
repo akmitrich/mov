@@ -1,17 +1,16 @@
 use crate::Num;
 
-use super::Section;
+use super::{Pos, Section};
 
 pub struct Point {
     pub local: Num,
 }
 
 impl Point {
-    pub fn mov(&mut self, displacement: Num, section: &Section) -> Result<Num, Num> {
+    pub fn mov(&mut self, displacement: Num, section: &Section) -> Pos {
         let pos = self.local + displacement;
-        section.shave_pos(pos).map(|pos| {
+        section.shave_pos(pos).inspect(|pos| {
             self.local = pos;
-            pos
         })
     }
 }

@@ -1,4 +1,4 @@
-use super::{Direction, Point};
+use super::{Direction, Point, Pos};
 use crate::Num;
 
 pub struct Section {
@@ -16,17 +16,17 @@ impl Section {
         }
     }
 
-    pub fn shave_pos(&self, pos: Num) -> Result<Num, Num> {
+    pub fn shave_pos(&self, pos: Num) -> Pos {
         if pos < 0.0 {
-            Err(pos)
+            Pos::Off(pos)
         } else if pos > self.length {
-            Err(pos - self.length)
+            Pos::Off(pos - self.length)
         } else {
-            Ok(pos)
+            Pos::On(pos)
         }
     }
 
-    pub fn accept_point(&self, remainder: Num) -> Result<Num, Num> {
+    pub fn accept_point(&self, remainder: Num) -> Pos {
         let pos = match Direction::from(remainder) {
             Direction::Even => self.length + remainder,
             Direction::Odd => remainder,

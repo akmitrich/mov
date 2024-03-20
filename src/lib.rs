@@ -8,7 +8,7 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use crate::base::{Direction, Point, Section};
+    use crate::base::{Direction, Point, Pos, Section};
 
     #[test]
     fn global_position() {
@@ -29,9 +29,9 @@ mod tests {
             length: 99.0,
             direction: Direction::Odd,
         };
-        assert_eq!(Ok(34.0), p.mov(0.55, &s));
-        assert_eq!(Err(-1.0), p.mov(-35.0, &s));
-        assert_eq!(Err(1.0), p.mov(66.0, &s));
+        assert_eq!(Pos::On(34.0), p.mov(0.55, &s));
+        assert_eq!(Pos::Off(-1.0), p.mov(-35.0, &s));
+        assert_eq!(Pos::Off(1.0), p.mov(66.0, &s));
     }
 
     #[test]
@@ -59,14 +59,16 @@ mod tests {
             length: 25.0,
             direction: Direction::Even,
         };
-        if let Err(rem) = p.mov(20.0, &s1) {
+        if let Pos::Off(rem) = p.mov(20.0, &s1) {
             p.local = s2.accept_point(rem).unwrap();
         } else {
             panic!("Section s1 is longer than you think.");
         }
         assert_eq!(10.0, p.local);
 
-        if let Err(rem) = p.mov(-20.0, &s1) {p.local=s2.accept_point(rem).unwrap();} else {
+        if let Pos::Off(rem) = p.mov(-20.0, &s1) {
+            p.local = s2.accept_point(rem).unwrap();
+        } else {
             panic!("Local position is greter than 20.");
         }
         assert_eq!(15.0, p.local);
