@@ -2,7 +2,7 @@ use crate::Num;
 
 use super::{Pos, Section};
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, PartialOrd, serde::Serialize, serde::Deserialize)]
 pub struct Point {
     pub local: Num,
 }
