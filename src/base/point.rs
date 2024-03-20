@@ -9,13 +9,9 @@ pub struct Point {
 impl Point {
     pub fn mov(&mut self, displacement: Num, section: &Section) -> Result<Num, Num> {
         let pos = self.local + displacement;
-        if pos < 0.0 {
-            Err(pos)
-        } else if pos > section.length {
-            Err(pos - section.length)
-        } else {
+        section.shave_pos(pos).map(|pos| {
             self.local = pos;
-            Ok(pos)
-        }
+            pos
+        })
     }
 }

@@ -15,4 +15,23 @@ impl Section {
             Direction::Even => self.global - point.local,
         }
     }
+
+    pub fn shave_pos(&self, pos: Num) -> Result<Num, Num> {
+        if pos < 0.0 {
+            Err(pos)
+        } else if pos > self.length {
+            Err(pos - self.length)
+        } else {
+            Ok(pos)
+        }
+    }
+
+    pub fn accept_point(&self, remainder: Num) -> Result<Num, Num> {
+        let pos = match Direction::from(remainder) {
+            Direction::Even => self.length + remainder,
+            Direction::Odd => remainder,
+            _ => 0.0,
+        };
+        self.shave_pos(pos)
+    }
 }

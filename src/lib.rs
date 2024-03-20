@@ -42,7 +42,33 @@ mod tests {
         assert_eq!(0.0, z * 1000.);
         assert_eq!(-7.0, d1 * 7.0);
         assert_eq!(42.5, d2 * 42.5);
-        assert_eq!(13.3, d1 * (d1 * 13.3));
-        assert_eq!(0.0, d2 * (z * 123.))
+        assert_eq!(13.3, d1 * (d1 * 13.3)); // without parenthesis it tries to Direction * Direction which is sad
+        assert_eq!(0.0, d2 * (z * 123.)); // without parenthesis it tries to Direction * Direction which is sad
+    }
+
+    #[test]
+    fn point_across_sections() {
+        let mut p = Point { local: 5.0 };
+        let s1 = Section {
+            global: 0.0,
+            length: 15.0,
+            direction: Direction::Odd,
+        };
+        let s2 = Section {
+            global: 0.0,
+            length: 25.0,
+            direction: Direction::Even,
+        };
+        if let Err(rem) = p.mov(20.0, &s1) {
+            p.local = s2.accept_point(rem).unwrap();
+        } else {
+            panic!("Section s1 is longer than you think.");
+        }
+        assert_eq!(10.0, p.local);
+
+        if let Err(rem) = p.mov(-20.0, &s1) {p.local=s2.accept_point(rem).unwrap();} else {
+            panic!("Local position is greter than 20.");
+        }
+        assert_eq!(15.0, p.local);
     }
 }

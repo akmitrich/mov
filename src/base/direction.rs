@@ -20,3 +20,15 @@ impl Mul<Num> for Direction {
         }
     }
 }
+
+impl From<Num> for Direction {
+    fn from(value: Num) -> Self {
+        if value.abs() < 1e-6 {
+            Self::No
+        } else if value < 0.0 {
+            Self::Even
+        } else {
+            Self::Odd
+        }
+    }
+}
