@@ -21,7 +21,7 @@ impl Track {
         }
     }
 
-    pub(crate) fn accept_car(&mut self, car_id: uuid::Uuid, direction: Direction) {
+    pub(crate) fn place_car(&mut self, car_id: uuid::Uuid, direction: Direction) {
         match direction {
             Direction::No => unreachable!(),
             Direction::Odd => self.cars.push_front(car_id),
