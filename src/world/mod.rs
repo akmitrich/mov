@@ -25,4 +25,11 @@ impl World {
             .get_mut(&id)
             .and_then(|item| item.as_any_mut().downcast_mut())
     }
+
+    pub fn items_of_type<T: Item + 'static>(&self) -> std::collections::HashMap<uuid::Uuid, &T> {
+        self.items
+            .iter()
+            .filter_map(|(id, item)| item.as_any().downcast_ref().map(|item| (*id, item)))
+            .collect()
+    }
 }

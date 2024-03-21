@@ -16,7 +16,13 @@ pub fn run() {
     if let Some(car) = w.item_mut::<rolling::Car>(car_id) {
         car.you_are_on(track_id);
     }
-    println!("World debug: {:#?}", w);
+    println!(
+        "World debug: {:#?}",
+        (
+            w.items_of_type::<track::Track>(),
+            w.items_of_type::<rolling::Car>()
+        )
+    );
     println!(
         "Track: {}\nCar: {}",
         serde_json::to_string_pretty(w.item::<track::Track>(track_id).unwrap()).unwrap(),
