@@ -28,4 +28,6 @@ pub fn run() {
         serde_json::to_string_pretty(w.item::<track::Track>(track_id).unwrap()).unwrap(),
         serde_json::to_string_pretty(w.item::<rolling::Car>(car_id).unwrap()).unwrap()
     );
+
+    w.save(format!("/tmp/{}.json", uuid::Uuid::new_v4()));
 }

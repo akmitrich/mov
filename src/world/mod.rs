@@ -1,3 +1,4 @@
+mod disk;
 mod item;
 
 pub use item::Item;
@@ -31,5 +32,9 @@ impl World {
             .iter()
             .filter_map(|(id, item)| item.as_any().downcast_ref().map(|item| (*id, item)))
             .collect()
+    }
+
+    pub fn save(&self, path: impl AsRef<std::path::Path>) {
+        disk::save(path, self);
     }
 }
