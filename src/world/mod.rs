@@ -1,3 +1,4 @@
+mod builder;
 mod disk;
 mod item;
 
@@ -13,6 +14,10 @@ impl World {
         let id = uuid::Uuid::new_v4();
         self.items.insert(id, Box::new(x));
         id
+    }
+
+    pub fn append_with_id<T: Item + 'static>(&mut self, id: uuid::Uuid, x: T) {
+        self.items.insert(id, Box::new(x));
     }
 
     pub fn item<T: Item + 'static>(&self, id: uuid::Uuid) -> Option<&T> {
@@ -36,5 +41,14 @@ impl World {
 
     pub fn save(&self, path: impl AsRef<std::path::Path>) {
         disk::save(path, self);
+    }
+
+    pub fn load(path: impl AsRef<std::path::Path>) -> Option<Self> {
+        disk::load(path)
+            .map_err(|e| {
+                eprintln!("ERROR loading: {:?}", e);
+                e
+            })
+            .ok()
     }
 }
