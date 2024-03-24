@@ -1,4 +1,4 @@
-use crate::{base::Point, Num};
+use crate::{base::Point, track::Track, world::World, Num};
 
 use super::specifications::Specifications;
 
@@ -20,6 +20,12 @@ impl Car {
 
     pub(crate) fn you_are_on(&mut self, track: uuid::Uuid) -> Option<uuid::Uuid> {
         self.track.replace(track)
+    }
+
+    pub fn global_position(&self, w: &World) -> Num {
+        w.item::<Track>(self.track.unwrap())
+            .map(|t| t.global_position(&self.location))
+            .unwrap_or(0.0)
     }
 }
 

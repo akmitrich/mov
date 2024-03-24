@@ -10,14 +10,14 @@ pub struct World {
 }
 
 impl World {
-    pub fn append<T: Item + 'static>(&mut self, x: T) -> uuid::Uuid {
+    pub fn append<T: Item + 'static>(&mut self, item: T) -> uuid::Uuid {
         let id = uuid::Uuid::new_v4();
-        self.items.insert(id, Box::new(x));
+        self.items.insert(id, Box::new(item));
         id
     }
 
-    pub fn append_with_id<T: Item + 'static>(&mut self, id: uuid::Uuid, x: T) {
-        self.items.insert(id, Box::new(x));
+    pub fn append_with_id<T: Item + 'static>(&mut self, id: uuid::Uuid, item: T) {
+        self.items.insert(id, Box::new(item));
     }
 
     pub fn item<T: Item + 'static>(&self, id: uuid::Uuid) -> Option<&T> {
@@ -39,16 +39,11 @@ impl World {
             .collect()
     }
 
-    pub fn save(&self, path: impl AsRef<std::path::Path>) {
-        disk::save(path, self);
+    pub fn save(&self, path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
+        disk::save(path, self)
     }
 
-    pub fn load(path: impl AsRef<std::path::Path>) -> Option<Self> {
+    pub fn load(path: impl AsRef<std::path::Path>) -> anyhow::Result<Self> {
         disk::load(path)
-            .map_err(|e| {
-                eprintln!("ERROR loading: {:?}", e);
-                e
-            })
-            .ok()
     }
 }

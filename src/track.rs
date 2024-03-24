@@ -1,5 +1,5 @@
 use crate::{
-    base::{Direction, Section},
+    base::{Direction, Point, Section},
     Num,
 };
 
@@ -27,5 +27,9 @@ impl Track {
             Direction::Odd => self.cars.push_front(car_id),
             Direction::Even => self.cars.push_back(car_id),
         }
+    }
+
+    pub fn global_position(&self, location: &Point) -> Num {
+        self.section.global_position(location)
     }
 }

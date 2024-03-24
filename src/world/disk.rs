@@ -2,7 +2,8 @@ use super::World;
 use crate::{rolling::Car, track::Track};
 use serde_json::json;
 
-pub(super) fn save(path: impl AsRef<std::path::Path>, world: &World) {
+pub(super) fn save(path: impl AsRef<std::path::Path>, world: &World) -> anyhow::Result<()> {
+    let output = std::fs::File::create(path)?;
     let mut w = serde_json::json!({});
     if let serde_json::Value::Object(map) = &mut w {
         map.insert(
@@ -14,8 +15,7 @@ pub(super) fn save(path: impl AsRef<std::path::Path>, world: &World) {
             serde_json::to_value(world.items_of_type::<Car>()).unwrap(),
         );
     }
-    let output = std::fs::File::create(path).unwrap();
-    let _ = serde_json::to_writer_pretty(output, &w);
+    Ok(serde_json::to_writer_pretty(output, &w)?)
 }
 
 pub(super) fn load(path: impl AsRef<std::path::Path>) -> anyhow::Result<World> {
