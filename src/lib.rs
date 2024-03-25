@@ -1,14 +1,16 @@
 pub mod base;
 pub mod rolling;
 pub mod track;
+pub mod train;
 pub mod world;
 
 pub type Num = f32;
 
 pub fn run() {
     let w = world::World::load("/tmp/world.json")
-        .inspect(|_| {
+        .map(|w| {
             eprintln!("The world is succesfully loaded");
+            w
         })
         .inspect_err(|e| eprintln!("Error while loading {:?}. Let's start from scratch", e))
         .unwrap_or_else(|_| build_world());
@@ -33,21 +35,23 @@ pub fn run() {
 
     let _ = w
         .save("/tmp/world.json")
-        .inspect(|_| eprintln!("World saved successfully"))
+        .map(|w| {
+            eprintln!("World saved successfully");
+            w
+        })
         .inspect_err(|e| eprintln!("Could not save the world because of error: {:?}", e));
 }
 
 fn build_world() -> world::World {
     let mut fiat_lux = world::World::default();
 
-    let track_id = fiat_lux.append(track::Track::new(105647.8, 2345.1, base::Direction::Even));
-    let car_id = fiat_lux.append(rolling::Car::new(75.0));
-    if let Some(track) = fiat_lux.item_mut::<track::Track>(track_id) {
-        track.place_car(car_id, base::Direction::Even);
-    }
-    if let Some(car) = fiat_lux.item_mut::<rolling::Car>(car_id) {
-        car.you_are_on(track_id);
-    }
+    let track_id = fiat_lux.append(track::Track::new(105647.8, 1000., base::Direction::Odd));
+    let car_id1 = fiat_lux.append(rolling::Car::new(75.0));
+    let car_id2 = fiat_lux.append(rolling::Car::new(75.0));
+    let train = train::Train::new(base::Direction::Odd)
+        .make_up(track_id, &[car_id1, car_id2], &mut fiat_lux)
+        .unwrap();
+    let train_id = fiat_lux.append(train);
 
     eprintln!("Built the world from scratch");
     fiat_lux

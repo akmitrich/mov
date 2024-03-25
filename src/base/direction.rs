@@ -1,4 +1,4 @@
-use std::ops::Mul;
+use std::ops::{Mul, Neg};
 
 use crate::Num;
 
@@ -17,6 +17,18 @@ impl Mul<Num> for Direction {
             Direction::No => 0.0,
             Direction::Odd => rhs,
             Direction::Even => -rhs,
+        }
+    }
+}
+
+impl Neg for Direction {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        match self {
+            Direction::No => self,
+            Direction::Odd => Direction::Even,
+            Direction::Even => Direction::Odd,
         }
     }
 }

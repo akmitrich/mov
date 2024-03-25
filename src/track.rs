@@ -21,6 +21,10 @@ impl Track {
         }
     }
 
+    pub fn length(&self) -> Num {
+        self.section.length
+    }
+
     pub(crate) fn place_car(&mut self, car_id: uuid::Uuid, direction: Direction) {
         match direction {
             Direction::No => unreachable!(),

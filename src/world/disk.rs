@@ -1,5 +1,5 @@
 use super::World;
-use crate::{rolling::Car, track::Track};
+use crate::{rolling::Car, track::Track, train::Train};
 use serde_json::json;
 
 pub(super) fn save(path: impl AsRef<std::path::Path>, world: &World) -> anyhow::Result<()> {
@@ -13,6 +13,10 @@ pub(super) fn save(path: impl AsRef<std::path::Path>, world: &World) -> anyhow::
         map.insert(
             "cars".to_owned(),
             serde_json::to_value(world.items_of_type::<Car>()).unwrap(),
+        );
+        map.insert(
+            "trains".to_owned(),
+            serde_json::to_value(world.items_of_type::<Train>()).unwrap(),
         );
     }
     Ok(serde_json::to_writer_pretty(output, &w)?)
@@ -29,6 +33,10 @@ pub(super) fn load(path: impl AsRef<std::path::Path>) -> anyhow::Result<World> {
             )
             .cars(
                 serde_json::from_value(map.get("cars").cloned().unwrap_or_else(|| json!({}))).ok(),
+            )
+            .trains(
+                serde_json::from_value(map.get("trains").cloned().unwrap_or_else(|| json!({})))
+                    .ok(),
             );
     }
     builder.build().ok_or_else(|| anyhow::Error::msg("ERROR"))

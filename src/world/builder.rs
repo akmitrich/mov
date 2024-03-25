@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{rolling::Car, track::Track};
+use crate::{rolling::Car, track::Track, train::Train};
 
 use super::{Item, World};
 
@@ -8,6 +8,7 @@ use super::{Item, World};
 pub(super) struct B {
     tracks: Option<HashMap<uuid::Uuid, Track>>,
     cars: Option<HashMap<uuid::Uuid, Car>>,
+    trains: Option<HashMap<uuid::Uuid, Train>>,
 }
 
 impl B {
@@ -21,11 +22,17 @@ impl B {
         self
     }
 
+    pub fn trains(mut self, trains: Option<HashMap<uuid::Uuid, Train>>) -> Self {
+        self.trains = trains;
+        self
+    }
+
     pub fn build(self) -> Option<World> {
-        let (tracks, cars) = (self.tracks?, self.cars?);
+        let (tracks, cars, trains) = (self.tracks?, self.cars?, self.trains?);
         let mut w = World::default();
         add_items_to_world(&mut w, tracks);
         add_items_to_world(&mut w, cars);
+        add_items_to_world(&mut w, trains);
         Some(w)
     }
 }
